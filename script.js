@@ -19,7 +19,11 @@ const gameBoard = (function() {
         board[row][column] = player;
     }
 
-    return {displayBoard,placeToken,getBoard}
+    const getToken = (row,column) => {
+        return board[row][column];
+    }
+
+    return {displayBoard,placeToken,getBoard,getToken}
 })();
 
 
