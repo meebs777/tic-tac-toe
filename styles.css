@@ -55,8 +55,23 @@
   button {
     width: 8rem;
     height: 8rem;
+    font-size: 4rem;
+    text-align: center;
+  }
+
+  .content {
+    height: 392px;
+    width: 392px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: none;
   }
 
   h1 {
     margin-bottom: 50px;
+  }
+
+  .player-title {
+    font-size: 2rem;
   }
