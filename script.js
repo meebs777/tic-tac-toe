@@ -34,10 +34,12 @@ function  GameController (playerOneName = "Player One", playerTwoName = "Player 
     players = [
         {
             name: playerOneName, 
-            token: "X"},
+            token: "X",
+            win: 0 },
         {
             name: playerTwoName,
-            token: "O"
+            token: "O",
+            win: 0
         }
     ]
 
@@ -124,17 +126,19 @@ function  GameController (playerOneName = "Player One", playerTwoName = "Player 
 
     printNewRound();
 
-    return {playRound,getActivePlayer,gameWin,gameWinreset};
+    return {playRound,getActivePlayer,gameWin,gameWinreset,switchPlayerTurn};
 };
 
 //const game = GameController("P1","P2");
 
-function ScreenController () {
+function ScreenController (playerOneName , playerTwoName ) {
 
-    const game = GameController();
+    const game = GameController(playerOneName , playerTwoName);
     const playerDiv = document.querySelector(".player-title");
     const boardDiv = document.querySelector(".content")
     const board = gameBoard.getBoard();
+    const reset = gameBoard.initializeBoard;
+    const resetButton = document.querySelector(".reset");
 
 
     const UpdateScreen = () => {
@@ -172,16 +176,69 @@ function ScreenController () {
     UpdateScreen();
     if(game.gameWin()) {
         boardDiv.removeEventListener("click", clickHandlerBoard); // when a win happens disable the player being able to click again
+        game.getActivePlayer().win++;
+        updateScore();
+        
+        console.log(game.getActivePlayer().win);
       }
   }
-  boardDiv.addEventListener("click", clickHandlerBoard);
-  
-  if(game.gameWin()) {
-    console.log("Hello Mibo")
+
+  function resetBoard () {
+    reset();
+    if(game.getActivePlayer().token === "O") {
+        game.switchPlayerTurn();
+    }
+    boardDiv.addEventListener("click", clickHandlerBoard);
+    UpdateScreen();
   }
 
+  function updateScore () {
+    const p1 = document.querySelector(".player1");
+    const p2 = document.querySelector(".player2");
+    const p1Score = document.querySelector(".p1score");
+    const p2Score = document.querySelector(".p2score");
+    p1.innerHTML = playerOneName;
+    p2.innerHTML = playerTwoName;
+
+    if(game.getActivePlayer().token === "X" && game.getActivePlayer().win !== 0) {
+        p1Score.innerHTML = game.getActivePlayer().win;
+    } else if  (game.getActivePlayer().token === "O" && game.getActivePlayer().win !== 0) {
+        p2Score.innerHTML = game.getActivePlayer().win;
+    } else {
+        p1Score.innerHTML = 0;
+        p2Score.innerHTML = 0;
+    }
+
+    
+
+  }
+
+  resetButton.addEventListener("click",resetBoard);
+
+  boardDiv.addEventListener("click", clickHandlerBoard);
   
-  //UpdateScreen();
+ 
+
+  resetBoard();
+  UpdateScreen();
+  updateScore();
 }
 
-ScreenController();
+function modal() {
+    const dialog = document.querySelector("dialog");
+    const closeButton = document.querySelector("dialog button");
+
+    function closeEvent () {
+        ScreenController(document.getElementById("player1").value,document.getElementById("player2").value);
+        dialog.close();
+    }
+    dialog.showModal();
+    closeButton.addEventListener("click",closeEvent);
+
+}
+
+//ScreenController();
+
+const startButton = document.querySelector(".start");
+
+startButton.addEventListener("click", modal);

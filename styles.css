@@ -52,7 +52,7 @@
     align-items: center;
   }
 
-  button {
+  .row > button {
     width: 8rem;
     height: 8rem;
     font-size: 4rem;
@@ -74,4 +74,18 @@
 
   .player-title {
     font-size: 2rem;
+  }
+
+
+  dialog {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    margin: 0 0 0 -150px;
+    
+  }
+
+  .score {
+    display: flex;
+    gap: 20px;
   }
